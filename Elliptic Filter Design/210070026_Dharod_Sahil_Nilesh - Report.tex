@@ -1,0 +1,658 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{floatrow}
+\usepackage{changepage}
+
+\title{Elliptical Filter Design}
+\author{Name : Dharod Sahil Nilesh\\ Roll No : 210070026}
+
+\begin{document}
+
+\maketitle
+
+\section{Theory behind Elliptical Filter}
+\textbf{Why Elliptic filter?}\\
+We prefer elliptic approximation to realise filters because, for a given order, the transition band is the smallest. This allows us to achieve the best approximation with the fewest resources. On the contrary we get very less phase control.
+\subsection{Transfer Function}
+The transfer function for an elliptic filter (or any type of FIR filter in general) is as follows:
+\begin{equation*}
+    |H(j\Omega)|^2 = \frac{1}{1+\epsilon_p^2U_N^2(w)};  w=\frac{\Omega}{\Omega_p}
+\end{equation*}
+where, N is the order of filter and $F_N$ is given by
+\begin{equation*}
+F_N^2(w)= 
+\left\{
+    \begin{array}{lr}
+        cd(NuK_1,k_1)&\text{Elliptic}\\
+        w^2 & \text{Butterworth} \\
+        C_N(w), & \text{Chebyschev} \\        
+    \end{array}
+\right\}
+\end{equation*}\\
+Here,
+$C_N$ is Chebyschev function and cd is a Jacobi elliptic function.\\
+\hspace*{9mm} k (selectivity parameter) is defined as the ratio of passband to stopband frequency\\
+\hspace*{9mm} $k_1$ (discrimination parameter) is defined as the ratio of $\epsilon_p$ and $\epsilon_s$
+\begin{equation*}
+    \epsilon_p = {\sqrt{(\frac{1}{1-\delta_1})^2-1}}
+\end{equation*}
+\begin{equation*}
+    \epsilon_s = {\sqrt{(\frac{1}{\delta_2})^2-1}}
+\end{equation*}
+For the filter specifications provided to us we have  $\delta1=\delta2=0.15$ \\
+\subsection{Elliptic Function}
+Elliptic Functions are meromorphic and doubly periodic functions extendable to Complex plane.
+There are total 3 types of elliptic functions, but here we are going to use only the first kind for designing Elliptic filter.
+\begin{equation}
+    \textbf{Elliptic Function of First Kind: }
+    F(\phi,k) = \int_{0}^{\phi} \frac{\,d\theta}{\sqrt{1-k^2\sin^2(\theta)}} 
+\end{equation}
+k is also called the eccentricity or elliptical modulus.(This can be related to arc length finding integral of ellipse)\\
+\\
+We define another quantity K(k) as the complete elliptical integral of order 1.
+\begin{equation}
+    K(k) = F(\frac{\pi}{2},k)
+\end{equation}
+Also for further calculation we introduce k' = $\sqrt{1-k^2}$ 'complementary elliptical modulus, with following relation:
+\begin{equation*}
+    K(k') = K'(k)
+\end{equation*}
+For calculations in Matlab,we use same standard naming convention.
+
+\subsection{Jacobi Elliptical Function}
+There are total of 12 function represented as pq(z,k) where p,q $\in$ {s,c,d,n} and for p = q the value of function becomes trivially 1. Therefore total of 12 functions to study.\\
+For making our elliptical filter we are focused only on cd(z,k) and sn(z,k).\\
+These functions can be generated from theta functions, but here we will use Elliptical First Kind integral. We define z = F($\phi$,k) (from equation 1). We then find inverse of F($\phi$,k) with respect to $\phi$ and call it \textit{Jacobi Amplitude}.
+\begin{equation*}
+    \phi = amp(z,k)
+\end{equation*}
+\begin{equation}
+    sn(z,k) = \sin(\phi) = \sin(amp(z,k))
+\end{equation}
+\begin{equation}
+    cn(z,k) = \cos(\phi) = \cos(amp(z,k))
+\end{equation}
+\begin{equation}
+    dn(z,k) = \frac{d}{dz}(\phi) = \frac{d}{dz}(amp(z,k))
+\end{equation}
+Equation 3, 4, 5 form the basis of Jacobi Elliptical Functions and rest 9 can formed from these 3 by following relation.
+\begin{equation*}
+    pq(z,k) = \frac{1}{qp(z,k)}
+\end{equation*}
+\begin{equation*}
+    pq(z,k) = \frac{pr(z,k)}{qr(z,k)}; \text{where }r \in \{s,n,c,d\}
+\end{equation*}
+Here,  z is the arbitrary complex vector, and k is the elliptic modulli.\\
+We will be using only the following 2 functions majorly : cd(z,k) and $sn^{-1}(u,k)$\\
+
+\begin{equation*}
+    cd(z,k) = cde(z/K,k)
+\end{equation*}
+\begin{equation*}
+    sn(z,k) = sne(z/K,k)
+\end{equation*}
+\begin{equation*}
+    v = asne(u,k) \text{ means v is solution of : } sn(v\cdot K,k) = u
+\end{equation*}
+(The above 3 equations are for equivalent matlab functions used)
+
+\subsection{Parameters, Poles and Zeroes}
+We already know how k and k' are evaluated section 2.1 . Now to kind Order:\\
+\begin{equation}
+    \textbf{Degree Equation : }N = ceil({\frac{K(k)\cdot K'(k_1)}{K'(k)\cdot K(k_1)}})
+\end{equation}
+N can be represented as 2l+r, where r $\in$ \{0,1\}\\
+Now, because there is ceiling function,  so there will be some overdesign(meeting more that specified requirements) i.e. $|H(j\Omega)|$ will fall below $\delta_2$ before reaching stopband frequency as N is not exact integer without ceil. So we can change our specs to new value of k such that N comes out to be same exact integer without ceil. 
+
+In matlab, this is done by using \textit{ellipdeg(N,k$_1$)}, this returns the value of k which satisfies the degree equation (6) for given value of N and K$_1$.\\
+Now the value of k has been updated, and this value will be used further in design.\\
+\textbf{Zeroes:} Zeroes of H(j$\Omega$) are poles of U$_N$($\Omega$).
+Let us first define few things:
+\begin{equation*}
+    u_i = \frac{2i-1}{N}\text{ ; where } i \in {1,2,...,l}
+\end{equation*}
+\begin{equation*}
+    \zeta_i = cd(u_i\cdot K(k),k) = \textit{cde}(u_i,k)
+\end{equation*}
+\begin{equation}
+    U_N(\Omega) = (\Omega)^r\Pi_{i=1}^l\left[\left(\frac{\Omega^2-\zeta_i^2}{1-\Omega^2k^2\zeta_i^2}\right)\cdot\left(\frac{1-k^2\zeta_i^2}{1-\zeta_i^2}\right)\right]
+\end{equation}
+$U_N$ has total 2l poles therefore there are total of 2l zeroes of H(j$\Omega$), which are given by : 
+\begin{equation}
+    z_i = \frac{j}{k\zeta_i}\text{ ; where } i \in {1,2,...,l}
+\end{equation}
+Remaining zeroes are $z_i^*$ i.e. conjugates of $z_i$\\
+\\
+\textbf{Poles:}
+\begin{equation*}
+    U_N(\Omega) = \frac{\pm j}{\epsilon_p}
+\end{equation*}
+There are 2l+r i.e. N poles to $|H(j\Omega)|$\\
+Let v $\in \mathbb{R}$ be a solution to $sn(jv\cdot N\cdot K(k),k)$ = j/$\epsilon_p$, therefore
+\begin{equation}
+    v = \frac{-j}{N\cdot K(k)}sn^{-1}(\frac{j}{\epsilon_p},k_1) = \frac{-j}{N}asne(\frac{j}{\epsilon_p},k_1)
+\end{equation}
+Poles are given by:
+\begin{equation}
+    p_i = jcd((u_i-jv)K(k),k) = jcde(u_i-jv,k)\text{ ,where } i\in {1,2,...,l}
+\end{equation}
+\begin{equation}
+    p_0 = jcd((1-jv)K(k),k) = jcde(1-jv,k)
+\end{equation}
+$p_0$ is the pole on negative real axis whixh occurs only when N is odd.Remaining poles are given by $p_i^*$ i.e. conjugates of $p_i$.\\
+
+\begin{equation}
+    H(s) = \frac{A}{(s-p_0)^r}\Pi_{i=0}^l\left[\frac{(s-z_i)(s-z_i^)}{(s-p_i)(s-p_i^)}\right]
+\end{equation}
+A is normalisation factor for making gain=1.
+
+\section{\textbf{Bandstop Elliptic Filter}}
+\subsection{\textbf{Un-normalized Discrete Time Filter Specifications}}
+Filter Number = 100\\
+Since filter number $>$ 80, m = 100 - 80 = 20.\\
+q(m) = greatest integer strictly less than 0.1*m = 1\\
+r(m) = m - 10*q(m) = 10\\
+$B_L$(m) = 20 + 3*q(m) + 11*r(m) = 20 + 3*1 + 11*10 = 133KHz \\
+$B_H$(m) = $B_L$(m) + 40 = 173KHz\\
+
+\vspace{1.5em}
+\noindent
+The specifications of this filter are :
+\begin{itemize}
+    \item Stopband : \textbf{133 - 173 KHz}
+    \item  Transition band : \textbf{5KHz} on either side of stopband
+    \item Passband : \textbf{0 - 128} and \textbf{178 - 212.5 KHz} (As \textbf{sampling rate} is \textbf{425KHz})
+
+    \item  Tolerance : \textbf{0.15} in \textbf{magnitude} for both passband and stopband
+    \item  Nature : Both passband and stopband are \textbf{equiripple}
+\end{itemize}
+
+\subsection{Normalized Digital Filter Specifications}
+Sampling rate = 425KHz\\
+In the normalized frequency axis, sampling rate corresponds to 2$\pi$\\
+Therefore, any frequency can be normalized as follows :
+\begin{equation*}
+    \omega = \frac{\Omega*2\pi}{\Omega_s}
+\end{equation*}
+where $\Omega_s$ is the Sampling Rate.\\
+
+\vspace{1em}
+\noindent
+For the normalized discrete filter specifications, the nature and tolerances being the dependent variables remain the same while the passband and stopband frequencies change as per the above transformations. 
+\begin{itemize}
+    \item Stopband : \textbf{0.626 -  0.814} {$\pi$}
+    \item  Transition band : \textbf{0.024} $\pi$ on either side of stopband
+    \item Passband : \textbf{0 - 0.602} {$\pi$} and \textbf{0.838 - 1} {$\pi$}
+\end{itemize}
+
+\subsection{Bilinear Transformation}
+To convert to analog domain, we use the following bilinear transformation :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+\begin{equation*}
+    \Omega_{analog} = \tan (\frac{w}{2})
+\end{equation*}
+Applying the transformation at Band Edges we get :
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\omega$ & $\Omega$\\
+			
+			\hline
+                0 & 0\\
+                \hline
+                0.626 $\pi$ & 1.501 \\
+                \hline
+                0.814 $\pi$ & 3.327\\
+                \hline
+                0.602 $\pi$ & 1.387\\
+                \hline
+                0.838 $\pi$ & 3.836\\
+                \hline
+                $\pi$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+Therefore, the corresponding specifications are :
+\begin{itemize}
+    \item Stopband :  \textbf{1.501} ($\Omega_{s1}$) - \textbf{3.327} ($\Omega_{s2}$)
+    \item  Transition band : Between the passband and stopband edges
+    \item Passband : \textbf{0 - 1.387}($\Omega_{p1}$) and \textbf{3.836} ($\Omega_{p2}$) \textbf{- $\infty$}
+\end{itemize}
+
+\subsection{Frequency Transformation and Relevant Parameters}
+We need to convert the Band - Stop filter into a Low - Pass analog filter as we are aware of it's frequency response in order to keep equiripple passband and stopband. For that purpose we use the following frequency transformation with two parameters B and $\Omega_o$
+
+\begin{equation*}
+    \Omega_l = \frac{B\Omega}{\Omega_o^2 - \Omega^2}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+If we follow the convention that the passband edges are mapped to +1 and -1, the parameters, in terms of the passband edges can be obtained by solving two equations and are given by :
+\begin{equation*}
+    \Omega_o = \sqrt{\Omega_{p1} \Omega_{p2}} = \sqrt{1.387*3.836} = 2.307
+\end{equation*}\begin{equation*}
+    B = \Omega_{p2}  - \Omega_{p1} = 2.449
+\end{equation*}
+
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\Omega$ & $\Omega_L$\\
+			
+			\hline
+                $0^{+}$ & $0^{+}$\\
+                \hline
+                1.387 ($\Omega_{p1}$) & 1 \\
+                \hline
+                1.501 ($\Omega_{s1}$) & 1.198\\
+                \hline
+                $2.307^{-}$ ($\Omega_o$) & +$\infty$\\
+                \hline
+                 $2.307^{+}$ ($\Omega_o$) & -$\infty$\\
+                \hline
+                3.327 ($\Omega_{s2}$)  & -1.418\\
+                \hline
+                3.836 ($\Omega_{p2}$) & -1\\
+                \hline
+                $\infty$ & $0^{-}$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+\vspace{1em}
+\noindent
+To make the filter as close to ideal as possible we choose the more stringent stopband for the lowpass filter i.e. $\Omega_{sL}$ = min($\Omega_{sL1}$ , - $\Omega_{sL2}$) = 1.198. (where $\Omega_{sL}$ stands for the stopband for the lowpass filter)
+
+\vspace{1em}
+\noindent
+Therefore the analog lowpass filter specifications are as follows:
+\begin{itemize}
+    \item Passband Edge : 1 ($\Omega_{pL}$)
+    \item Stopband Edge : 1.198 ($\Omega_{sL}$)
+\end{itemize}
+
+\subsection{Analog Elliptic Lowpass Transfer function}
+As now we have $\Omega_{pL}$ and $\Omega_{sL}$, we can plug them into formula of k and k$_1$ :
+
+\begin{equation*}
+    \epsilon_p=\sqrt{(\frac{1}{0.85})^2-1}=0.6197 
+\end{equation*}
+\begin{equation*}
+    \epsilon_s=\sqrt{(\frac{1}{0.15})^2-1}=6.5912 
+\end{equation*}
+\begin{equation*}
+    k_1 = \frac{\epsilon_p}{\epsilon_s} = \frac{0.6197}{6.5912}=0.0940
+\end{equation*}
+\begin{equation*}
+    k = \frac{\Omega_{pL}}{\Omega_{sL}} = \frac{1}{1.198} = 0.8347
+\end{equation*}
+\begin{equation*}
+N = ceil({\frac{K(k)\cdot K'(k_1)}{K'(k)\cdot K(k_1)}}) = ceil(2.8798)
+\end{equation*}
+Thus giving N = 3; $\implies$ l=1 and r=1\\
+
+Thus rounding off N, we get k=0.8571 and the modified value of $\Omega_{sL}$=1.1667\\
+
+We now just have to get the transfer function so we use equation 8,9 for getting both the things.\\
+\begin{center}
+Zeros are:
+$z_1$=j/(0.9257*0.8571)=1.2604j\\
+$z_1^*$=-1.2604j \\
+\end{center}
+\begin{center}
+Poles are:
+$p_0$=-0.6232 \\
+$p_1$=-0.1153 + 0.9936j \\
+$p_1^*$=-0.1153 - 0.9936j \\
+\end{center}
+
+Thus, $H_{analog,LP}$ is given by:
+\begin{equation*}
+    H_{analog,LP} = \frac{0.3925s^2 + 0.6235}{s^3 + 0.8539s^2 + 1.1443s + 0.6235}
+\end{equation*}
+Pole-zero Map:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{Screenshot (156).png}
+    \caption{Pole-Zero Plot}
+    \label{fig:my_label}
+\end{figure}
+\subsection{Analog Bandstop Transfer Function}
+The transformation is given by :
+\begin{equation*}
+    s_L = \frac{Bs}{s^2 + \Omega_o^2 }
+\end{equation*}
+Substituting the values of B and $\Omega_o$
+\begin{equation*}
+    s_L = \frac{2.449s}{s^2 + 5.321}
+\end{equation*}
+
+Using the above transformation we get we get $H_{analog,BSF}$(s)  from $H_{analog,LPF}$(s)
+\begin{equation*}
+    H_{analog\_BS}(s) = \frac{s^6 + 19.7420s^4 + 105.0721s^2 + 150.7596}{s^6 + 4.4945s^5 + 24.1797s^4 + 71.3974s^3 + 128.6903s^2 + 127.3116s^1 + 150.7598}
+\end{equation*}
+
+\subsection{Discrete Time Filter Transfer Function}
+To transform the analog domain transfer function into the discrete domain, we need to make use of the Bilinear Transformation which is given as :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+Using  above  equation  we  get $H_{discrete,BSF}$(z)  from $H_{analog,BSF}$(s)
+\begin{equation*}
+H_{discrete\_BS}(z) = \frac{0.5446z^6 + 2.1054z^5 + 4.2368z^4 + 5.2259z^3 + 4.2368z^2 + 2.1054z + 0.5446}{1z^6 + 3.1484z^5 + 5.0575z^4 + 5.0748z^3 + 3.3056z^2 + 1.2136z + 0.1997}  
+\end{equation*}
+
+
+\subsection{Matlab Plots}
+\subsubsection{Frequency Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.65\textheight]{Screenshot (153).png}
+    \label{fig:my_label}
+\end{figure}
+
+\subsubsection{Magnitude and Phase Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.65\textheight]{Screenshot (152).png}
+    \label{fig:my_label}
+\end{figure}
+
+\subsubsection{Pole - Zero Plot}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.5\textheight]{Screenshot (154).png}
+    \label{fig:my_label}
+\end{figure}
+
+As we can see, all poles of above transfer function lie within unit circle. So, the system is stable.
+\newpage
+\section{\textbf{Bandpass Elliptic Filter}}
+\subsection{\textbf{Un-normalized Discrete Time Filter Specifications}}
+Filter Number = 100\\
+Since filter number $>$ 80, m = 100 - 80 = 20 and passband will be equiripple.\\
+q(m) = greatest integer strictly less than 0.1*m = 1\\
+r(m) = m - 10*q(m) = 10\\
+$B_L$(m) = 10 + 5*q(m) + 13*r(m) = 10 + 5*1 + 13*10 = 145KHz \\
+$B_H$(m) = $B_L$(m) + 75 = 220KHz\\
+
+\vspace{1.5em}
+\noindent
+The specifications of this filter are :
+\begin{itemize}
+    \item Passband : \textbf{145 - 220 KHz}
+    \item  Transition band : \textbf{5KHz} on either side of passband
+    \item Stopband : \textbf{0 - 140}  and  \textbf{225 - 300 KHz} (As \textbf{sampling rate} is \textbf{600KHz})
+
+    \item  Tolerance : \textbf{0.15} in \textbf{magnitude} for both passband and stopband
+    \item  Nature : Both passband and stopband are \textbf{equiripple}
+\end{itemize}
+
+
+\subsection{Normalized Digital Filter Specifications}
+Sampling rate = 600KHz\\
+In the normalized frequency axis, sampling rate corresponds to 2$\pi$\\
+
+Therefore, any frequency can be normalized as follows :
+\begin{equation*}
+    \omega = \frac{\Omega*2\pi}{\Omega_s}
+\end{equation*}
+where $\Omega_s$ is the Sampling Rate.\\
+
+\vspace{1em}
+\noindent
+For the normalized discrete filter specifications, the nature and tolerances being the dependent variables remain the same while the passband and stopband frequencies change as per the above transformations. 
+\begin{itemize}
+    \item Passband : \textbf{0.483 -  0.733} {$\pi$}
+    \item  Transition band : \textbf{0.0167} $\pi$ on either side of passband
+    \item Stopband : \textbf{0 - 0.466} {$\pi$} and \textbf{0.75 - 1} {$\pi$}
+\end{itemize}
+
+
+\subsection{Bilinear Transformation}
+To convert to analog domain, we use the following bilinear transformation :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+\begin{equation*}
+    \Omega_{analog} = \tan (\frac{w}{2})
+\end{equation*}
+Applying the transformation at Band Edges we get :
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\omega$ & $\Omega$\\
+			
+			\hline
+                0 & 0\\
+                \hline
+                0.466 $\pi$ & 0.9 \\
+                \hline
+                0.483 $\pi$ & 0.949\\
+                \hline
+                0.733 $\pi$ & 2.246\\
+                \hline
+                0.75 $\pi$ & 2.414\\
+                \hline
+                $\pi$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+
+Therefore, the corresponding specifications are :
+\begin{itemize}
+    \item Passband :  \textbf{0.949} ($\Omega_{p1}$) - \textbf{2.414} ($\Omega_{p2}$)
+    \item  Transition band : Between the passband and stopband edges
+    \item Stopband : \textbf{0 - 0.9}($\Omega_{p1}$) and \textbf{2.246} ($\Omega_{p2}$) \textbf{- $\infty$}
+\end{itemize}
+
+
+\subsection{Frequency Transformation and Relevant Parameters}
+We need to convert the Band - Pass filter into a Low - Pass analog filter as we are aware of it's frequency response in order to keep equiripple passband and monotonic stopband. For that purpose we use the following frequency transformation with two parameters B and $\Omega_o$
+
+\begin{equation*}
+    \Omega_l = \frac{\Omega^2 - \Omega_o^2}{B\Omega}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+If we follow the convention that the passband edges are mapped to +1 and -1, the parameters, in terms of the passband edges can be obtained by solving two equations and are given by :
+\begin{equation*}
+    \Omega_o = \sqrt{\Omega_{p1} \Omega_{p2}} = \sqrt{0.949*2.246} = 1.46
+\end{equation*}\begin{equation*}
+    B = \Omega_{p2}  - \Omega_{p1} = 1.297
+\end{equation*}
+
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\Omega$ & $\Omega_L$\\
+			
+			\hline
+                $0^{+}$ & -$\infty$\\
+                \hline
+                0.9 ($\Omega_{s1}$) & -1.131 \\
+                \hline
+                0.949($\Omega_{p1}$) & -1\\
+                \hline
+                1.46 ($\Omega_o$) & 0\\
+                \hline
+                2.246 ($\Omega_{p2}$)  & 1 \\
+                \hline
+                2.414 ($\Omega_{s2}$) & 1.18\\
+                \hline
+                $\infty$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+\vspace{1em}
+\noindent
+To make the filter as close to ideal as possible we choose the more stringent stopband for the lowpass filter i.e. $\Omega_{sL}$ = min($\Omega_{sL1}$ , - $\Omega_{sL2}$) = 1.131. (where $\Omega_{sL}$ stands for the stopband for the lowpass filter)
+
+\vspace{1em}
+\noindent
+Therefore the analog lowpass filter specifications are as follows:
+\begin{itemize}
+    \item Passband Edge : 1 ($\Omega_{pL}$)
+    \item Stopband Edge : 1.131 ($\Omega_{sL}$)
+\end{itemize}
+
+\subsection{Analog Elliptic Lowpass Transfer function}
+As now we have $\Omega_{pL}$ and $\Omega_{sL}$, we can plug them into formula of k and k$_1$ :
+
+\begin{equation*}
+    \epsilon_p=\sqrt{(\frac{1}{0.85})^2-1}=0.6197 
+\end{equation*}
+\begin{equation*}
+    \epsilon_s=\sqrt{(\frac{1}{0.15})^2-1}=6.5912 
+\end{equation*}
+\begin{equation*}
+    k_1 = \frac{\epsilon_p}{\epsilon_s} = \frac{0.6197}{6.5912} = 0.0940
+\end{equation*}
+\begin{equation*}
+    k = \frac{\Omega_{pL}}{\Omega_{sL}} = \frac{1}{1.131} = 0.8842
+\end{equation*}
+\begin{equation*}
+N = ceil({\frac{K(k)\cdot K'(k_1)}{K'(k)\cdot K(k_1)}}=ceil(3.1708)
+\end{equation*}
+
+From this we get N = 4 $\implies$ l=2 and r=0 and thus rounding off N, we get k = 0.9595. 
+Thus we get modified value of $\Omega_{sL}$=1.0422.\\
+
+We now just have to get the transfer function so we use equation 8,9 for getting both the things.\\
+\begin{center}
+Zeros are:
+$z_1$=j/(0.9796*0.9595)=1.0639j\\
+$z_1^*$=-1.0639j \\
+$z_2$=j/(0.5891*0.9595)=1.7692j\\
+$z_2^*$=-1.7692j \\
+\end{center}
+\begin{center}
+Poles are:
+$p_1$=-0.0310 + 0.9995i \\    
+$p_1^*$=-0.0310 - 0.9995i \\
+$p_2$=-0.3536 + 0.7071i \\
+$p_2^*$=-0.3536 - 0.7071i \\
+\end{center}
+
+Pole-zero Map:
+\begin{figure}[H]
+    \centering
+    \hspace*{-3.8cm}
+    \includegraphics[scale=0.5]{Screenshot (165).png}
+    \caption{Pole-Zero Plot}
+    \label{fig:my_label}
+\end{figure}
+
+As N is even, we also need to account for the DC gain (which changes the normalization factor) which is $1/\sqrt(1+\epsilon^2)$, where $\epsilon$ is given by :
+\begin{equation*}
+    \epsilon = \sqrt{\frac{1}{(\delta_1 - 1)^2} - 1} \implies \frac{1}{\sqrt{1 + \epsilon^2}} = 1 - \delta_1
+\end{equation*}
+\begin{equation}
+    H_{analog\_LP}(s) = \frac{0.15s^4 + 0.6392s^2 + 0.5313}{s^4 + 0.7691s^3 + 1.6689s^2 + 0.7459s + 0.6251}
+\end{equation}
+
+\subsection{Analog Bandpass Transfer Function}
+The transformation is given by :
+\begin{equation*}
+    s_L = \frac{s^2 + \Omega_o^2}{Bs}
+\end{equation*}
+Substituting the values of B and $\Omega_o$
+\begin{equation*}
+    s_L = \frac{s^2 + 2.13}{1.297s}
+\end{equation*}
+
+Using the above transformation we get we get $H_{analog,BP}$(s)  from $H_{analog,LP}$(s)
+\begin{equation*}
+    \hspace*{-2cm}
+    H_{analog\_BP}(s) = \frac{0.15s^8 + 2.3542s^6 + 10.1769s^4 + 10.6969s^2 + 3.0968}{s^8 + 0.9976s^7 + 11.3338s^6 + 8.0067s^5 + 40.9998s^4 + 17.0672s^3 + 51.4977s^2 + 9.6618s + 20.6454}
+\end{equation*}
+
+\subsection{Discrete Time Filter Transfer Function}
+To transform the analog domain transfer function into the discrete domain, we need to make use of the Bilinear Transformation which is given as :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+Using  above  equation  we  get $H_{discrete,BP}$(z)  from $H_{analog,BP}$(s)
+\begin{equation*}
+\hspace*{-2cm}
+    H_{discrete,BP}(z) = \frac{0.1642z^8 + 0.3532z^7 + 0.6352z^6 + 0.8166z^3 + 0.6352z^2 + 0.3532z + 0.1642}{z^8 + 2.4063z^7 + 4.9158z^6 + 6.2429z^5 + 7.0272z^4 + 5.4125z^3 + 3.6866z^2 + 1.5366z + 0.5567}   
+\end{equation*}
+
+\subsection{Matlab Plots}
+\subsubsection{Frequency Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.65\textheight]{Screenshot (162).png}
+    \label{fig:my_label}
+\end{figure}
+
+\subsubsection{Magnitude and Phase Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.65\textheight]{Screenshot (160).png}
+    \label{fig:my_label}
+\end{figure}
+
+\subsubsection{Pole - Zero Plot}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[width=1.5\linewidth, height=0.5\textheight]{Screenshot (161).png}
+    \label{fig:my_label}
+\end{figure}
+
+As we can see, all poles of above transfer function lie within unit circle. So, the system is stable.
+
+\newpage
+\subsection{Observations on Elliptical Filter Design and comparisons with Butterworth, Chebyschev and FIR methods}
+
+\begin{itemize}
+    \item For the same passband and stopband specifications, the order i.e. the number of resources required (which can be seen from the unit sample delays in the signal flow graph or in some sense the degree of the numerator/denominator in Z-transform), is highest for FIR and least for Elliptic Filter.
+    \item In Butterworth and Elliptic Filter, it is possible to independently to control passband and stopband tolerances while this is not feasible in a FIR Filter.
+    \item The phase response is linear for a FIR Filter as we preferably want while we don't have any phase control in Elliptic and Butterworth filters.
+    \item Also in the Magnitude plot, FIR filters don't have much ripple, whereas in Elliptic and Butterworth, the ripples are such that it just satisfies the specifications of passband and stopband tolerances.
+\end{itemize}
+Similar arguments also hold for the Chebyschev Filter. Thus, there always a trade-off, as each type of filter has it's own pros and cons and we need to choose appropriate filter as per our requirements.
+\end{document}

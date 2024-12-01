@@ -1,0 +1,392 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.5)  5 MAR 2024 03:26
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**/home/joel/Documents/EE/EE338/Assignment1/EE338_Assgn1.tex
+(/home/joel/Documents/EE/EE338/Assignment1/EE338_Assgn1.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+(/usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2023/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count188
+\c@section=\count189
+\c@subsection=\count190
+\c@subsubsection=\count191
+\c@paragraph=\count192
+\c@subparagraph=\count193
+\c@figure=\count194
+\c@table=\count195
+\abovecaptionskip=\skip48
+\belowcaptionskip=\skip49
+\bibindent=\dimen140
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen141
+\Gin@req@width=\dimen142
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2023/05/13 v2.17o AMS math features
+\@mathmargin=\skip50
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2023/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks18
+\ex@=\dimen143
+)) (/usr/local/texlive/2023/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen144
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count196
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count197
+\leftroot@=\count198
+LaTeX Info: Redefining \overline on input line 399.
+LaTeX Info: Redefining \colon on input line 410.
+\classnum@=\count199
+\DOTSCASE@=\count266
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box51
+\strutbox@=\box52
+LaTeX Info: Redefining \big on input line 722.
+LaTeX Info: Redefining \Big on input line 723.
+LaTeX Info: Redefining \bigg on input line 724.
+LaTeX Info: Redefining \Bigg on input line 725.
+\big@size=\dimen145
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count267
+LaTeX Info: Redefining \bmod on input line 905.
+LaTeX Info: Redefining \pmod on input line 910.
+LaTeX Info: Redefining \smash on input line 940.
+LaTeX Info: Redefining \relbar on input line 970.
+LaTeX Info: Redefining \Relbar on input line 971.
+\c@MaxMatrixCols=\count268
+\dotsspace@=\muskip16
+\c@parentequation=\count269
+\dspbrk@lvl=\count270
+\tag@help=\toks19
+\row@=\count271
+\column@=\count272
+\maxfields@=\count273
+\andhelp@=\toks20
+\eqnshift@=\dimen146
+\alignsep@=\dimen147
+\tagshift@=\dimen148
+\tagwidth@=\dimen149
+\totwidth@=\dimen150
+\lineht@=\dimen151
+\@envbody=\toks21
+\multlinegap=\skip51
+\multlinetaggap=\skip52
+\mathdisplay@stack=\toks22
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (/usr/local/texlive/2023/texmf-dist/tex/latex/floatrow/floatrow.sty
+Package: floatrow 2008/08/02 v0.3b floatrow: float package extension
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen152
+\captionmargin=\dimen153
+\caption@leftmargin=\dimen154
+\caption@rightmargin=\dimen155
+\caption@width=\dimen156
+\caption@indent=\dimen157
+\caption@parindent=\dimen158
+\caption@hangindent=\dimen159
+Package caption Info: Standard document class detected.
+)
+\c@float@type=\count274
+\float@exts=\toks23
+\float@box=\box53
+\@floatcapt=\box54
+Package floatrow Info: Modified float package code loaded on input line 455.
+Package floatrow Info: Modified rotfloat package code loaded on input line 473.
+\FR@everyfloat=\toks24
+\flrow@foot=\insert252
+\FB@wd=\dimen160
+\FBo@wd=\dimen161
+\FBc@wd=\dimen162
+\FBo@ht=\skip53
+\FBc@ht=\skip54
+\FBf@ht=\skip55
+\FBo@max=\skip56
+\FBc@max=\skip57
+\FBf@max=\skip58
+\c@FBl@b=\count275
+\floatbox@depth=\count276
+\c@FRobj=\count277
+\c@FRsobj=\count278
+\Xhsize=\skip59
+\sXhsize=\skip60
+\Zhsize=\skip61
+\sZhsize=\skip62
+\flrow@rowbox=\box55
+\FR@Zunitlength=\dimen163
+\c@FBcnt=\count279
+\FPOScnt=\count280
+\LTleft=\skip63
+\LTright=\skip64
+\LTleft=\skip65
+\LTright=\skip66
+\flrow@types=\toks25
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/changepage/changepage.sty
+Package: changepage 2009/10/20 v1.0c check page and change page layout
+\c@cp@cntr=\count281
+\cp@tempcnt=\count282
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count283
+\l__pdf_internal_box=\box56
+) (./EE338_Assgn1.aux)
+\openout1 = `EE338_Assgn1.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+ (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count284
+\scratchdimen=\dimen164
+\scratchbox=\box57
+\nofMPsegments=\count285
+\nofMParguments=\count286
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count287
+\MPscratchDim=\dimen165
+\MPnumerator=\count288
+\makeMPintoPDFobject=\count289
+\everyMPtoPDFconversion=\toks27
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+LaTeX Font Info:    Trying to load font information for U+msa on input line 12.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 12.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+
+LaTeX Warning: No \author given.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
+
+ []
+
+[1
+
+{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+Underfull \hbox (badness 10000) in paragraph at lines 65--67
+
+ []
+
+[2] [3]
+/home/joel/Documents/EE/EE338/Assignment1/EE338_Assgn1.tex:179: Undefined control sequence.
+l.179 \subsubsubsection
+                       {Analog Lowpass Transfer Function}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<poles_bpf.jpg, id=23, 577.15625pt x 418.56375pt>
+File: poles_bpf.jpg Graphic file (type jpg)
+<use poles_bpf.jpg>
+Package pdftex.def Info: poles_bpf.jpg  used on input line 227.
+(pdftex.def)             Requested size: 288.57741pt x 209.28136pt.
+[4] [5 <./poles_bpf.jpg>] [6]
+Overfull \hbox (0.95871pt too wide) in paragraph at lines 368--401
+[][] 
+ []
+
+
+Overfull \hbox (0.95871pt too wide) in paragraph at lines 410--443
+[][] 
+ []
+
+[7]
+<Freq_resp_bpf.jpg, id=39, 577.15625pt x 398.48875pt>
+File: Freq_resp_bpf.jpg Graphic file (type jpg)
+<use Freq_resp_bpf.jpg>
+Package pdftex.def Info: Freq_resp_bpf.jpg  used on input line 451.
+(pdftex.def)             Requested size: 404.0066pt x 278.94022pt.
+<mag_Resp_bpf.jpg, id=40, 577.15625pt x 418.56375pt>
+File: mag_Resp_bpf.jpg Graphic file (type jpg)
+<use mag_Resp_bpf.jpg>
+Package pdftex.def Info: mag_Resp_bpf.jpg  used on input line 459.
+(pdftex.def)             Requested size: 346.29642pt x 251.14018pt.
+ [8 <./Freq_resp_bpf.jpg>]
+<pole_zeroplot_bpf.jpg, id=44, 577.15625pt x 418.56375pt>
+File: pole_zeroplot_bpf.jpg Graphic file (type jpg)
+<use pole_zeroplot_bpf.jpg>
+Package pdftex.def Info: pole_zeroplot_bpf.jpg  used on input line 467.
+(pdftex.def)             Requested size: 288.57741pt x 209.28136pt.
+ [9 <./mag_Resp_bpf.jpg> <./pole_zeroplot_bpf.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 490--492
+
+ []
+
+[10] [11]
+/home/joel/Documents/EE/EE338/Assignment1/EE338_Assgn1.tex:606: Undefined control sequence.
+l.606 \subsubsubsection
+                       {Analog Lowpass Transfer Function}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<poles_bsf.jpg, id=54, 577.15625pt x 418.56375pt>
+File: poles_bsf.jpg Graphic file (type jpg)
+<use poles_bsf.jpg>
+Package pdftex.def Info: poles_bsf.jpg  used on input line 654.
+(pdftex.def)             Requested size: 288.57741pt x 209.28136pt.
+[12] [13 <./poles_bsf.jpg>]
+Overfull \hbox (100.74358pt too wide) in paragraph at lines 709--724
+[][] 
+ []
+
+
+Overfull \hbox (106.99359pt too wide) in paragraph at lines 742--767
+[][] 
+ []
+
+[14]
+Overfull \hbox (118.95198pt too wide) in paragraph at lines 776--801
+[][] 
+ []
+
+
+Overfull \hbox (119.10806pt too wide) in paragraph at lines 816--841
+[][] 
+ []
+
+[15]
+Overfull \hbox (123.0942pt too wide) in paragraph at lines 850--876
+[][] 
+ []
+
+[16]
+<Freq_resp_bsf.jpg, id=71, 567.11874pt x 425.59pt>
+File: Freq_resp_bsf.jpg Graphic file (type jpg)
+<use Freq_resp_bsf.jpg>
+Package pdftex.def Info: Freq_resp_bsf.jpg  used on input line 884.
+(pdftex.def)             Requested size: 396.98041pt x 297.91095pt.
+<mag_resp_bsf.jpg, id=72, 577.15625pt x 418.56375pt>
+File: mag_resp_bsf.jpg Graphic file (type jpg)
+<use mag_resp_bsf.jpg>
+Package pdftex.def Info: mag_resp_bsf.jpg  used on input line 892.
+(pdftex.def)             Requested size: 346.29642pt x 251.14018pt.
+ [17 <./Freq_resp_bsf.jpg>]
+<pole_zeroplot_bsf.jpg, id=76, 577.15625pt x 418.56375pt>
+File: pole_zeroplot_bsf.jpg Graphic file (type jpg)
+<use pole_zeroplot_bsf.jpg>
+Package pdftex.def Info: pole_zeroplot_bsf.jpg  used on input line 900.
+(pdftex.def)             Requested size: 288.57741pt x 209.28136pt.
+ [18 <./mag_resp_bsf.jpg> <./pole_zeroplot_bsf.jpg>]
+<Freq_resp_final.jpg, id=80, 577.15625pt x 418.56375pt>
+File: Freq_resp_final.jpg Graphic file (type jpg)
+<use Freq_resp_final.jpg>
+Package pdftex.def Info: Freq_resp_final.jpg  used on input line 911.
+(pdftex.def)             Requested size: 404.0066pt x 292.99261pt.
+<Final_TF.jpg, id=81, 1856.9375pt x 964.60374pt>
+File: Final_TF.jpg Graphic file (type jpg)
+<use Final_TF.jpg>
+Package pdftex.def Info: Final_TF.jpg  used on input line 921.
+(pdftex.def)             Requested size: 557.08556pt x 289.38336pt.
+
+Overfull \hbox (114.72314pt too wide) in paragraph at lines 919--923
+ |  [] 
+ []
+
+[19 <./Freq_resp_final.jpg>]
+<polezero_final.jpg, id=86, 577.15625pt x 418.56375pt>
+File: polezero_final.jpg Graphic file (type jpg)
+<use polezero_final.jpg>
+Package pdftex.def Info: polezero_final.jpg  used on input line 930.
+(pdftex.def)             Requested size: 346.29642pt x 251.14018pt.
+ [20 <./Final_TF.jpg>] [21 <./polezero_final.jpg>] (./EE338_Assgn1.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+ ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 4154 strings out of 474116
+ 66646 string characters out of 5743689
+ 1980187 words of memory out of 5000000
+ 26492 multiletter control sequences out of 15000+600000
+ 566267 words of font info for 68 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 57i,11n,65p,394b,317s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on EE338_Assgn1.pdf (21 pages, 642139 bytes).
+PDF statistics:
+ 149 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+

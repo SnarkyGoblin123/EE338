@@ -1,0 +1,934 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{floatrow}
+\usepackage{changepage}
+\title{EE338 : Digital Signal Processing \\ Filter Design Assignment}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{\textbf{Student Details}}
+\textbf{Name : }Joel Anto Paul\\
+\textbf{Roll No. : }210070037\\
+\textbf{Filter Number : }21
+
+\section{\textbf{IIR Multi-Band pass Filter}}
+\subsection{\textbf{Un-normalized Discrete Time Filter Specifications}}
+Filter Number M = 21\\
+M = 11Q + R\\
+Q = Quotient when M is divided by 11 = 1\\
+R = Remainder when M is divided by 11 = 10\\
+\textbf{Passband 1 specifications:} \\
+$B_L$(m) = 40 + 5Q = 40 + 5*1 = 45KHz \\
+$B_H$(m) = 70 + 5Q = 70 + 5 = 75KHz\\
+\textbf{Passband 2 specifications:}\\
+$B_L$(m) = 170 + 5R = 170 + 5*10 = 220KHz \\
+$B_H$(m) = 200 + 5R = 200 + 50 = 250KHz\\
+\noindent
+Therefore the specifications of the \textbf{Multi-Band pass} Filter are:
+\begin{itemize}
+    \item Passband : \textbf{45 - 75 KHz} and \textbf{220 - 250 KHz} 
+    \item Stopband : \textbf{0 - 40 KHz}, \textbf{80 - 215 KHz} and \textbf{255 - 300 KHz} (As \textbf{sampling rate} is \textbf{600 KHz})
+    \item  Transition band : \textbf{5KHz} on either side of the passband and stopband
+    \item  Tolerance : \textbf{0.15} in \textbf{magnitude} for both passband and stopband
+    \item  Nature : Both passband and stopband are \textbf{monotonic}
+\end{itemize}
+
+Sampling Rate = \textbf{600 KHz}\\
+\noindent
+
+To design such a filter, we will cascade two filters, a Bandpass and a Bandstop filter, each of them being butterworth filters. The specifications of these two filters are mentioned below:
+
+\subsection{\textbf{Bandpass Butterworth Filter}}
+\subsubsection{\textbf{Un-normalized Discrete Time Filter Specifications}}
+
+\noindent
+The specifications of this filter are :
+\begin{itemize}
+    \item Passband : \textbf{45 - 250 KHz}
+    \item Stopband : \textbf{0 - 40 KHz} and \textbf{255 - 300 KHz}
+    \item  Transition band : \textbf{5KHz} on either side of passband
+    \item  Tolerance : \textbf{0.15} in \textbf{magnitude} for both passband and stopband
+    \item  Nature : Both passband and stopband are \textbf{monotonic}
+\end{itemize}
+
+\subsubsection{Normalized Digital Filter Specifications}
+
+In the normalized frequency axis, sampling rate corresponds to 2$\pi$\\
+Therefore, any frequency can be normalized as follows :
+\begin{equation*}
+    \omega = \frac{\Omega*2\pi}{\Omega_s}
+\end{equation*}
+where $\Omega_s$ is the Sampling Rate.\\
+
+\vspace{1em}
+\noindent
+For the normalized discrete filter specifications, the nature and tolerances being the dependent variables remain the same while the passband and stopband frequencies change as per the above transformations. 
+\begin{itemize}
+    \item Passband : \textbf{0.15 - 0.833} {$\pi$}
+    \item Stopband : \textbf{0 -  0.133} {$\pi$} and \textbf{0.85 - 1} {$\pi$}
+    \item  Transition band : \textbf{0.0167} $\pi$ on either side of stopband
+\end{itemize}
+
+\subsubsection{Bilinear Transformation}
+To convert to analog domain, we use the following bilinear transformation :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+\begin{equation*}
+    \Omega_{analog} = \tan (\frac{w}{2})
+\end{equation*}
+Applying the transformation at Band Edges we get :
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\omega$ & $\Omega$\\
+			
+			\hline
+                0 & 0\\
+                \hline
+                0.133 $\pi$ & 0.213 \\
+                \hline
+                0.15 $\pi$ & 0.24\\
+                \hline
+                0.833 $\pi$ & 3.732\\
+                \hline
+                0.85 $\pi$ & 4.165\\
+                \hline
+                $\pi$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+Therefore, the corresponding specifications are :
+\begin{itemize}
+    \item Passband :  \textbf{0.24} ($\Omega_{p1}$) - \textbf{3.732} ($\Omega_{p2}$)
+    \item  Transition band : Between the passband and stopband edges
+    \item Stopband : \textbf{0 - 0.213}($\Omega_{s1}$) and \textbf{4.165} ($\Omega_{s2}$) \textbf{- $\infty$}
+\end{itemize}
+
+\subsubsection{Frequency Transformation and Relevant Parameters}
+We need to convert the Band - Pass filter into a Low - Pass analog filter as we are aware of it's frequency response in order to keep monotonic passband and stopband. For that purpose we use the following frequency transformation with two parameters B and $\Omega_o$
+
+\begin{equation*}
+    \Omega_l = \frac{\Omega^2 - \Omega_o^2 }{B\Omega}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+If we follow the convention that the passband edges are mapped to +1 and -1, the parameters, in terms of the passband edges can be obtained by solving two equations and are given by :
+\begin{equation*}
+    \Omega_o = \sqrt{\Omega_{p1} \Omega_{p2}} = \sqrt{0.24*3.732} = 0.946
+\end{equation*}\begin{equation*}
+    B = \Omega_{p2}  - \Omega_{p1} = 3.492
+\end{equation*}
+
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\Omega$ & $\Omega_L$\\
+			
+			\hline
+                $0^{+}$ & - $\infty$\\
+                \hline
+                0.213 ($\Omega_{s1}$) & -1.142 \\
+                \hline
+                0.24 ($\Omega_{p1}$) & -1\\
+                \hline
+                0.946 ($\Omega_o$) & 0\\
+                \hline
+                3.732 ($\Omega_{p2}$)  & 1\\
+                \hline
+                4.165 ($\Omega_{s2}$) & 1.131\\
+                \hline
+                $\infty$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+\vspace{1em}
+\noindent
+To make the filter as close to ideal as possible we choose the more stringent stopband for the lowpass filter i.e. $\Omega_{sL}$ = min($\Omega_{sL1}$ , - $\Omega_{sL2}$) = 1.131. (where $\Omega_{sL}$ stands for the stopband for the lowpass filter)
+
+\vspace{1em}
+\noindent
+Therefore the analog lowpass filter specifications are as follows:
+\begin{itemize}
+    \item Passband Edge : 1 ($\Omega_{pL}$)
+    \item Stopband Edge : 1.131 ($\Omega_{sL}$)
+\end{itemize}
+
+\subsubsubsection{Analog Lowpass Transfer Function}
+To keep the frequency response monotonic in passband and stopband we use the Butterworth approximation and let the transfer function of the analog lowpass filter to be of the form : 
+
+\begin{equation*}
+    |H(j\Omega)|^2 = \frac{1}{1 + (\frac{\Omega}{\Omega_c})^{2N}}
+\end{equation*}
+
+where $\Omega_c$ is the bandwidth frequency and N is the number of energy elements required to realize the filter.
+
+\vspace{1em}
+\noindent
+We define two new parameters $D_1$ and $D_2$ such that
+\begin{equation*}
+    D_1 = \frac{1}{(1 - \delta_1)^2} - 1 = 0.384
+\end{equation*}
+\begin{equation}
+    D_2 = \frac{1}{(\delta_2)^2} - 1 = 43.44
+\end{equation}
+where $\delta_1$ = $\delta_2$ = 0.15
+
+\vspace{1em}
+\noindent
+Upon applying the condition that at the passband and stopband edges the response must lie within the tolerances specified, we get a lower bound on the value of N which is given by:
+\begin{equation*}
+    N \geq \frac{\log(\frac{D_2}{D_1})}{2*\log(\frac{\Omega_s}{\Omega_p})} = 19.2
+\end{equation*}
+As we would naturally use lesser number of elements, we choose N to be the least integer above 19.2 i.e. N = 20
+
+\vspace{1em}
+\noindent
+Based on the bound on N, we also obtain the bounds on $\Omega_c$ for a fixed N :
+\begin{equation*}
+    \frac{\Omega_p}{(D_1)^{\frac{1}{2N}}} \leq \Omega_c \leq \frac{\Omega_s}{(D_2)^{\frac{1}{2N}}}
+\end{equation*}
+\begin{equation*}
+    1.024 \leq \Omega_c \leq 1.029
+\end{equation*}
+We choose the value of $\Omega_c$ to be the average of the two bounds i.e. $\Omega_c$ = (1.024 + 1.029)/2 = 1.027. Thus we obtained the parameters for our Butterworth Lowpass filter.
+\noindent
+\vspace{1em}
+Thus our analog filter becomes 
+\begin{equation*}
+    |H_{analog}(s)|^2 = \frac{1}{1+(\frac{s}{1.027j})^{40}}
+\end{equation*}
+
+Using MATLAB, we plot the poles of the magnitude response of the analog low pass filter.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale = 0.5]{poles_bpf.jpg}
+    \caption{}
+    \label{fig:my_label}
+\end{figure}
+In order to get a stable Analog Low Pass Filter we include the poles lying in the Left Half Plane in the Transfer Function. Thus, the required poles are :
+        
+
+
+  Columns 16 through 20
+
+  
+
+  
+
+\noindent
+\vspace{1em}
+\begin{center}
+$p_1$ = -0.0806 + 1.0238i \newline
+$p_2$ = -0.2397 + 0.9986i  \newline
+$p_3$ = -0.3930 + 0.9488i \newline
+$p_4$ = -0.5366 + 0.8757i \newline
+$p_5$ = -0.6670 + 0.7809i \newline
+$p_6$ = -0.7809 + 0.6670i \newline
+$p_7$ = -0.8757 + 0.5366i \newline
+$p_8$ = -0.9488 + 0.3930i \newline
+$p_9$ = -0.9986 + 0.2397i  \newline
+$p_{10}$ =  -1.0238 + 0.0806i   \newline
+$p_{11}$ = -1.0238 - 0.0806i   \newline
+$p_{12}$ = -0.9986 - 0.2397i     \newline
+$p_{13}$ = -0.9488 - 0.3930i     \newline
+$p_{14}$ = -0.8757 - 0.5366i   \newline
+$p_{15}$ = -0.7809 - 0.6670i     \newline
+$p_{16}$ = -0.6670 - 0.7809i       \newline
+$p_{17}$ = -0.5366 - 0.8757i       \newline
+$p_{18}$ = -0.3930 - 0.9488i       \newline
+$p_{19}$ = -0.2397 - 0.9986i       \newline
+$p_{20}$ = -0.0806 - 1.0238i     \newline
+\end{center}
+\noindent
+\vspace{1em}
+Using the above poles, we can write the Analog Lowpass Transfer function as:
+(The scaling of numerator is done to achieve a DC Gain of unity)
+\begin{equation*}
+    H_{analog}(s_L) = \frac{(\Omega_c)^N}{\Pi_{i=1}^{20} (s_L-p_i)}
+\end{equation*}
+The values of the coefficients of the corresponding Analog Lowpass Transfer Function  is given as
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{+0cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s_L^{ 20 }$ & $ 1.0 \times 10^{ 0 }$ & $s_L^{ 13 }$ & $ 1.124 \times 10^{ 4 }$ & $s_L^{ 6 }$ & $ 7.941 \times 10^{ 3 }$  \\
+\hline
+$s_L^{ 19 }$ & $ 1.309 \times 10^{ 1 }$ & $s_L^{ 12 }$ & $ 1.674 \times 10^{ 4 }$ & $s_L^{ 5 }$ & $ 4.008 \times 10^{ 3 }$  \\
+\hline
+$s_L^{ 18 }$ & $ 8.567 \times 10^{ 1 }$ & $s_L^{ 11 }$ & $ 2.142 \times 10^{ 4 }$ & $s_L^{ 4 }$ & $ 1.656 \times 10^{ 3 }$  \\
+\hline
+$s_L^{ 17 }$ & $ 3.722 \times 10^{ 2 }$ & $s_L^{ 10 }$ & $ 2.366 \times 10^{ 4 }$ & $s_L^{ 3 }$ & $ 5.405 \times 10^{ 2 }$  \\
+\hline
+$s_L^{ 16 }$ & $ 1.203 \times 10^{ 3 }$ & $s_L^{ 9 }$ & $ 2.259 \times 10^{ 4 }$ & $s_L^{ 2 }$ & $ 1.312 \times 10^{ 2 }$  \\
+\hline
+$s_L^{ 15 }$ & $ 3.07 \times 10^{ 3 }$ & $s_L^{ 8 }$ & $ 1.862 \times 10^{ 4 }$ & $s_L^{ 1 }$ & $ 2.114 \times 10^{ 1 }$  \\
+\hline
+$s_L^{ 14 }$ & $ 6.417 \times 10^{ 3 }$ & $s_L^{ 7 }$ & $ 1.319 \times 10^{ 4 }$ & $s_L^{ 0 }$ & $ 1.704 \times 10^{ 0 }$  \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+\subsubsection{Analog Bandpass Transfer Function}
+The transformation is given by :
+\begin{equation*}
+    s_L = \frac{s^2 + \Omega_o^2 }{Bs}
+\end{equation*}
+Substituting the values of B and $\Omega_o$
+\begin{equation*}
+    s_L = \frac{3.492s}{s^2 + 0.946}
+\end{equation*}
+After substituting it can be written in the form N(s)/D(s) where the coefficients of N(s) and D(s) are given below :
+
+\begin{equation*}
+    N(s) = 1.238 \times 10^{11}. s^{20} 
+\end{equation*}
+
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{+0cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 40 }$ & $ 1.0 \times 10^{ 0 }$ & $s^{ 26 }$ & $ 1.054 \times 10^{ 12 }$ & $s^{ 12 }$ & $ 5.866 \times 10^{ 10 }$  \\
+\hline
+$s^{ 39 }$ & $ 4.571 \times 10^{ 1 }$ & $s^{ 25 }$ & $ 2.357 \times 10^{ 12 }$ & $s^{ 11 }$ & $ 1.584 \times 10^{ 10 }$  \\
+\hline
+$s^{ 38 }$ & $ 1.063 \times 10^{ 3 }$ & $s^{ 24 }$ & $ 4.58 \times 10^{ 12 }$ & $s^{ 10 }$ & $ 3.762 \times 10^{ 9 }$  \\
+\hline
+$s^{ 37 }$ & $ 1.663 \times 10^{ 4 }$ & $s^{ 23 }$ & $ 7.681 \times 10^{ 12 }$ & $s^{ 9 }$ & $ 7.841 \times 10^{ 8 }$  \\
+\hline
+$s^{ 36 }$ & $ 1.959 \times 10^{ 5 }$ & $s^{ 22 }$ & $ 1.103 \times 10^{ 13 }$ & $s^{ 8 }$ & $ 1.429 \times 10^{ 8 }$  \\
+\hline
+$s^{ 35 }$ & $ 1.842 \times 10^{ 6 }$ & $s^{ 21 }$ & $ 1.347 \times 10^{ 13 }$ & $s^{ 7 }$ & $ 2.263 \times 10^{ 7 }$  \\
+\hline
+$s^{ 34 }$ & $ 1.433 \times 10^{ 7 }$ & $s^{ 20 }$ & $ 1.389 \times 10^{ 13 }$ & $s^{ 6 }$ & $ 3.079 \times 10^{ 6 }$  \\
+\hline
+$s^{ 33 }$ & $ 9.434 \times 10^{ 7 }$ & $s^{ 19 }$ & $ 1.207 \times 10^{ 13 }$ & $s^{ 5 }$ & $ 3.546 \times 10^{ 5 }$  \\
+\hline
+$s^{ 32 }$ & $ 5.339 \times 10^{ 8 }$ & $s^{ 18 }$ & $ 8.858 \times 10^{ 12 }$ & $s^{ 4 }$ & $ 3.379 \times 10^{ 4 }$  \\
+\hline
+$s^{ 31 }$ & $ 2.625 \times 10^{ 9 }$ & $s^{ 17 }$ & $ 5.525 \times 10^{ 12 }$ & $s^{ 3 }$ & $ 2.57 \times 10^{ 3 }$  \\
+\hline
+$s^{ 30 }$ & $ 1.128 \times 10^{ 10 }$ & $s^{ 16 }$ & $ 2.952 \times 10^{ 12 }$ & $s^{ 2 }$ & $ 1.472 \times 10^{ 2 }$  \\
+\hline
+$s^{ 29 }$ & $ 4.257 \times 10^{ 10 }$ & $s^{ 15 }$ & $ 1.361 \times 10^{ 12 }$ & $s^{ 1 }$ & $ 5.672 \times 10^{ 0 }$  \\
+\hline
+$s^{ 28 }$ & $ 1.412 \times 10^{ 11 }$ & $s^{ 14 }$ & $ 5.454 \times 10^{ 11 }$ & $s^{ 0 }$ & $ 1.112 \times 10^{ -1 }$  \\
+\hline
+$s^{ 27 }$ & $ 4.12 \times 10^{ 11 }$ & $s^{ 13 }$ & $ 1.91 \times 10^{ 11 }$ & - & -  \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+\subsubsection{Discrete Time Filter Transfer Function}
+To transform the analog domain transfer function into the discrete domain, we need to make use ofthe Bilinear Transformation which is given as :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+Using  above  equation  we  get $H_{discrete,BPF}$(z)  from $H_{analog,BPF}$(s).It  can  be  written  in  the  form N(z)/D(z) where the coefficients of the polynomials N(z) and D(z) are given as :-
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{+0cm}{}
+		\caption{Numerator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 40 }$ & $ 1.436 \times 10^{ -3 }$ & $s^{ 26 }$ & $ -1.113 \times 10^{ 2 }$ & $s^{ 12 }$ & $ 5.564 \times 10^{ 1 }$  \\
+\hline
+$s^{ 39 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 25 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 11 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 38 }$ & $ -2.871 \times 10^{ -2 }$ & $s^{ 24 }$ & $ 1.808 \times 10^{ 2 }$ & $s^{ 10 }$ & $ -2.226 \times 10^{ 1 }$  \\
+\hline
+$s^{ 37 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 23 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 9 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 36 }$ & $ 2.728 \times 10^{ -1 }$ & $s^{ 22 }$ & $ -2.411 \times 10^{ 2 }$ & $s^{ 8 }$ & $ 6.955 \times 10^{ 0 }$  \\
+\hline
+$s^{ 35 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 21 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 7 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 34 }$ & $ -1.637 \times 10^{ 0 }$ & $s^{ 20 }$ & $ 2.652 \times 10^{ 2 }$ & $s^{ 6 }$ & $ -1.637 \times 10^{ 0 }$  \\
+\hline
+$s^{ 33 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 19 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 5 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 32 }$ & $ 6.955 \times 10^{ 0 }$ & $s^{ 18 }$ & $ -2.411 \times 10^{ 2 }$ & $s^{ 4 }$ & $ 2.728 \times 10^{ -1 }$  \\
+\hline
+$s^{ 31 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 17 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 3 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 30 }$ & $ -2.226 \times 10^{ 1 }$ & $s^{ 16 }$ & $ 1.808 \times 10^{ 2 }$ & $s^{ 2 }$ & $ -2.871 \times 10^{ -2 }$  \\
+\hline
+$s^{ 29 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 15 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 1 }$ & $ 0.0 \times 10^{ 0 }$  \\
+\hline
+$s^{ 28 }$ & $ 5.564 \times 10^{ 1 }$ & $s^{ 14 }$ & $ -1.113 \times 10^{ 2 }$ & $s^{ 0 }$ & $ 1.436 \times 10^{ -3 }$  \\
+\hline
+$s^{ 27 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 13 }$ & $ 0.0 \times 10^{ 0 }$ & - & -  \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{+0cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 40 }$ & $ 1.0 \times 10^{ 0 }$ & $s^{ 26 }$ & $ -2.387 \times 10^{ 2 }$ & $s^{ 12 }$ & $ 1.66 \times 10^{ 0 }$  \\
+\hline
+$s^{ 39 }$ & $ -6.797 \times 10^{ -1 }$ & $s^{ 25 }$ & $ 8.806 \times 10^{ 1 }$ & $s^{ 11 }$ & $ -2.368 \times 10^{ -1 }$  \\
+\hline
+$s^{ 38 }$ & $ -7.384 \times 10^{ 0 }$ & $s^{ 24 }$ & $ 1.974 \times 10^{ 2 }$ & $s^{ 10 }$ & $ -3.873 \times 10^{ -1 }$  \\
+\hline
+$s^{ 37 }$ & $ 4.65 \times 10^{ 0 }$ & $s^{ 23 }$ & $ -6.55 \times 10^{ 1 }$ & $s^{ 9 }$ & $ 4.494 \times 10^{ -2 }$  \\
+\hline
+$s^{ 36 }$ & $ 2.807 \times 10^{ 1 }$ & $s^{ 22 }$ & $ -1.373 \times 10^{ 2 }$ & $s^{ 8 }$ & $ 7.163 \times 10^{ -2 }$  \\
+\hline
+$s^{ 35 }$ & $ -1.633 \times 10^{ 1 }$ & $s^{ 21 }$ & $ 4.07 \times 10^{ 1 }$ & $s^{ 7 }$ & $ -6.492 \times 10^{ -3 }$  \\
+\hline
+$s^{ 34 }$ & $ -7.15 \times 10^{ 1 }$ & $s^{ 20 }$ & $ 8.06 \times 10^{ 1 }$ & $s^{ 6 }$ & $ -1.011 \times 10^{ -2 }$  \\
+\hline
+$s^{ 33 }$ & $ 3.828 \times 10^{ 1 }$ & $s^{ 19 }$ & $ -2.117 \times 10^{ 1 }$ & $s^{ 5 }$ & $ 6.713 \times 10^{ -4 }$  \\
+\hline
+$s^{ 32 }$ & $ 1.353 \times 10^{ 2 }$ & $s^{ 18 }$ & $ -3.991 \times 10^{ 1 }$ & $s^{ 4 }$ & $ 1.024 \times 10^{ -3 }$  \\
+\hline
+$s^{ 31 }$ & $ -6.644 \times 10^{ 1 }$ & $s^{ 17 }$ & $ 9.199 \times 10^{ 0 }$ & $s^{ 3 }$ & $ -4.428 \times 10^{ -5 }$  \\
+\hline
+$s^{ 30 }$ & $ -2.008 \times 10^{ 2 }$ & $s^{ 16 }$ & $ 1.662 \times 10^{ 1 }$ & $s^{ 2 }$ & $ -6.626 \times 10^{ -5 }$  \\
+\hline
+$s^{ 29 }$ & $ 9.004 \times 10^{ 1 }$ & $s^{ 15 }$ & $ -3.32 \times 10^{ 0 }$ & $s^{ 1 }$ & $ 1.401 \times 10^{ -6 }$  \\
+\hline
+$s^{ 28 }$ & $ 2.41 \times 10^{ 2 }$ & $s^{ 14 }$ & $ -5.779 \times 10^{ 0 }$ & $s^{ 0 }$ & $ 2.061 \times 10^{ -6 }$  \\
+\hline
+$s^{ 27 }$ & $ -9.828 \times 10^{ 1 }$ & $s^{ 13 }$ & $ 9.856 \times 10^{ -1 }$ & $s^{ -1 }$ & $ 1.0 \times 10^{ 0 }$  \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+\subsubsection{Matlab Plots}
+\textbf{Frequency Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.7]{Freq_resp_bpf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\textbf{Magnitude Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.6]{mag_Resp_bpf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\textbf{Pole - Zero Plot}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.5]{pole_zeroplot_bpf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\subsection{\textbf{Bandstop Butterworth Filter}}
+\subsubsection{\textbf{Un-normalized Discrete Time Filter Specifications}}
+
+\noindent
+The specifications of this filter are :
+\begin{itemize}
+    \item Stopband : \textbf{80 - 215 KHz}
+    \item Passband : \textbf{0 - 75 KHz} and \textbf{220 - 300 KHz}
+    \item  Transition band : \textbf{5KHz} on either side of passband
+    \item  Tolerance : \textbf{0.15} in \textbf{magnitude} for both passband and stopband
+    \item  Nature : Both passband and stopband are \textbf{monotonic}
+\end{itemize}
+
+\subsubsection{Normalized Digital Filter Specifications}
+
+In the normalized frequency axis, sampling rate corresponds to 2$\pi$\\
+Therefore, any frequency can be normalized as follows :
+\begin{equation*}
+    \omega = \frac{\Omega*2\pi}{\Omega_s}
+\end{equation*}
+where $\Omega_s$ is the Sampling Rate.\\
+
+\vspace{1em}
+\noindent
+For the normalized discrete filter specifications, the nature and tolerances being the dependent variables remain the same while the passband and stopband frequencies change as per the above transformations. 
+\begin{itemize}
+    \item Stopband : \textbf{0.267 - 0.717} {$\pi$}
+    \item Passband : \textbf{0 -  0.25} {$\pi$} and \textbf{0.733 - 1} {$\pi$}
+    \item  Transition band : \textbf{0.0167} $\pi$ on either side of stopband
+\end{itemize}
+
+\subsubsection{Bilinear Transformation}
+To convert to analog domain, we use the following bilinear transformation :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+\begin{equation*}
+    \Omega_{analog} = \tan (\frac{w}{2})
+\end{equation*}
+Applying the transformation at Band Edges we get :
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\omega$ & $\Omega$\\
+			
+			\hline
+                0 & 0\\
+                \hline
+                0.25 $\pi$ & 0.414 \\
+                \hline
+                0.267 $\pi$ & 0.445\\
+                \hline
+                0.717 $\pi$ & 2.097\\
+                \hline
+                0.733 $\pi$ & 2.246\\
+                \hline
+                $\pi$ & $\infty$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+Therefore, the corresponding specifications are :
+\begin{itemize}
+    \item Stopband :  \textbf{0.445} ($\Omega_{s1}$) - \textbf{2.097} ($\Omega_{s2}$)
+    \item  Transition band : Between the passband and stopband edges
+    \item Passband : \textbf{0 - 0.414}($\Omega_{p1}$) and \textbf{2.246} ($\Omega_{p2}$) \textbf{- $\infty$}
+\end{itemize}
+
+\subsubsection{Frequency Transformation and Relevant Parameters}
+We need to convert the Band - Stop filter into a Low - Pass analog filter as we are aware of it's frequency response in order to keep monotonic passband and stopband. For that purpose we use the following frequency transformation with two parameters B and $\Omega_o$
+
+\begin{equation*}
+    \Omega_l = \frac{B\Omega}{ \Omega_o^2 - \Omega^2}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+If we follow the convention that the passband edges are mapped to +1 and -1, the parameters, in terms of the passband edges can be obtained by solving two equations and are given by :
+\begin{equation*}
+    \Omega_o = \sqrt{\Omega_{p1} \Omega_{p2}} = \sqrt{0.414*2.246} = 0.964
+\end{equation*}\begin{equation*}
+    B = \Omega_{p2}  - \Omega_{p1} = 1.832
+\end{equation*}
+
+\begin{table}[H]
+		% Center the table
+		\begin{center}
+		\begin{tabular}{|c|c|}
+			% To create a horizontal line, type \hline
+			\hline
+			% To end a column type &
+			% For a linebreak type \\
+			$\Omega$ & $\Omega_L$\\
+			
+			\hline
+                $0^{+}$ & $0^{+}$\\
+                \hline
+                0.414 ($\Omega_{p1}$) & +1 \\
+                \hline
+                0.445 ($\Omega_{s1}$) & 1.115\\
+                \hline
+                $0.946^{-}$ ($\Omega_o$) & $\infty$\\
+                \hline
+                $0.946^{+}$ ($\Omega_o$) & $-\infty$\\
+                \hline
+                2.097 ($\Omega_{s2}$)  & -1.108\\
+                \hline
+                2.246 ($\Omega_{p2}$) & -1\\
+                \hline
+                $\infty$ & $0^{-}$\\
+                \hline
+            
+		\end{tabular}
+		\end{center}
+\end{table}
+
+\vspace{1em}
+\noindent
+To make the filter as close to ideal as possible we choose the more stringent stopband for the lowpass filter i.e. $\Omega_{sL}$ = min($\Omega_{sL1}$ , - $\Omega_{sL2}$) = 1.108. (where $\Omega_{sL}$ stands for the stopband for the lowpass filter)
+
+\vspace{1em}
+\noindent
+Therefore the analog lowpass filter specifications are as follows:
+\begin{itemize}
+    \item Passband Edge : 1 ($\Omega_{pL}$)
+    \item Stopband Edge : 1.108 ($\Omega_{sL}$)
+\end{itemize}
+
+\subsubsubsection{Analog Lowpass Transfer Function}
+To keep the frequency response monotonic in passband and stopband we use the Butterworth approximation and let the transfer function of the analog lowpass filter to be of the form : 
+
+\begin{equation*}
+    |H(j\Omega)|^2 = \frac{1}{1 + (\frac{\Omega}{\Omega_c})^{2N}}
+\end{equation*}
+
+where $\Omega_c$ is the bandwidth frequency and N is the number of energy elements required to realize the filter.
+
+\vspace{1em}
+\noindent
+We define two new parameters $D_1$ and $D_2$ such that
+\begin{equation*}
+    D_1 = \frac{1}{(1 - \delta_1)^2} - 1 = 0.384
+\end{equation*}
+\begin{equation}
+    D_2 = \frac{1}{(\delta_2)^2} - 1 = 43.44
+\end{equation}
+where $\delta_1$ = $\delta_2$ = 0.15
+
+\vspace{1em}
+\noindent
+Upon applying the condition that at the passband and stopband edges the response must lie within the tolerances specified, we get a lower bound on the value of N which is given by:
+\begin{equation*}
+    N \geq \frac{\log(\frac{D_2}{D_1})}{2*\log(\frac{\Omega_s}{\Omega_p})} = 23.05
+\end{equation*}
+As we would naturally use lesser number of elements, we choose N to be the least integer above 23.05 i.e. N = 24
+
+\vspace{1em}
+\noindent
+Based on the bound on N, we also obtain the bounds on $\Omega_c$ for a fixed N :
+\begin{equation*}
+    \frac{\Omega_p}{(D_1)^{\frac{1}{2N}}} \leq \Omega_c \leq \frac{\Omega_s}{(D_2)^{\frac{1}{2N}}}
+\end{equation*}
+\begin{equation*}
+    1.020 \leq \Omega_c \leq 1.024
+\end{equation*}
+We choose the value of $\Omega_c$ to be the average of the two bounds i.e. $\Omega_c$ = (1.020 + 1.024)/2 = 1.022. Thus we obtained the parameters for our Butterworth Lowpass filter.
+\noindent
+\vspace{1em}
+Thus our analog filter becomes 
+\begin{equation*}
+    |H_{analog}(s)|^2 = \frac{1}{1+(\frac{s}{1.022j})^{48}}
+\end{equation*}
+
+Using MATLAB, we plot the poles of the magnitude response of the analog low pass filter.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale = 0.5]{poles_bsf.jpg}
+    \caption{}
+    \label{fig:my_label}
+\end{figure}
+In order to get a stable Analog Low Pass Filter we include the poles lying in the Left Half Plane in the Transfer Function. Thus, the required poles are :
+        
+
+
+  Columns 16 through 20
+
+  
+
+  
+
+\noindent
+\vspace{1em}
+\begin{center}
+$p_{ 0 }$ =  -0.0668  + j 1.0198 \\
+$p_{ 1 }$ =  -0.1994  + j 1.0024 \\
+$p_{ 2 }$ =  -0.3285  + j 0.9678 \\
+$p_{ 3 }$ =  -0.452  + j 0.9166 \\
+$p_{ 4 }$ =  -0.5678  + j 0.8498 \\
+$p_{ 5 }$ =  -0.6739  + j 0.7684 \\
+$p_{ 6 }$ =  -0.7684  + j 0.6739 \\
+$p_{ 7 }$ =  -0.8498  + j 0.5678 \\
+$p_{ 8 }$ =  -0.9166  + j 0.452 \\
+$p_{ 9 }$ =  -0.9678  + j 0.3285 \\
+$p_{ 10 }$ =  -1.0024  + j 0.1994 \\
+$p_{ 11 }$ =  -1.0198  + j 0.0668 \\
+$p_{ 12 }$ =  -1.0198  + j 0.0668 \\
+$p_{ 13 }$ =  -1.0024  + j 0.1994 \\
+$p_{ 14 }$ =  -0.9678  + j 0.3285 \\
+$p_{ 15 }$ =  -0.9166  + j 0.452 \\
+$p_{ 16 }$ =  -0.8498  + j 0.5678 \\
+$p_{ 17 }$ =  -0.7684  + j 0.6739 \\
+$p_{ 18 }$ =  -0.6739  + j 0.7684 \\
+$p_{ 19 }$ =  -0.5678  + j 0.8498 \\
+$p_{ 20 }$ =  -0.452  + j 0.9166 \\
+$p_{ 21 }$ =  -0.3285  + j 0.9678 \\
+$p_{ 22 }$ =  -0.1994  + j 1.0024 \\
+$p_{ 23 }$ =  -0.0668  + j 1.0198 \\
+\end{center}
+\noindent
+\vspace{1em}
+Using the above poles, we can write the Analog Lowpass Transfer function as:
+(The scaling of numerator is done to achieve a DC Gain of unity)
+\begin{equation*}
+    H_{analog}(s_L) = \frac{(\Omega_c)^N}{\Pi_{i=1}^{24} (s_L-p_i)}
+\end{equation*}
+The values of the coefficients of the corresponding Analog Lowpass Transfer Function  is given as
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{-2.5cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s_L^{ 24 }$ & $ 1.0 \times 10^{ 0 }$ & $s_L^{ 20 }$ & $ 7.542 \times 10^{ 3 }$ & $s_L^{ 15 }$ & $ 1.66 \times 10^{ 5 }$  & $s_L^{ 10 }$ & $ 1.355 \times 10^{ 5 }$ & $s_L^{ 5 }$ & $ 3.479 \times 10^{ 3 }$ \\
+\hline
+$s_L^{ 23 }$ & $ 1.563 \times 10^{ 1 }$ & $s_L^{ 19 }$ & $ 1.907 \times 10^{ 4 }$ & $s_L^{ 14 }$ & $ 2.041 \times 10^{ 5 }$  & $s_L^{ 9 }$ & $ 8.884 \times 10^{ 4 }$ & $s_L^{ 4 }$ & $ 9.382 \times 10^{ 2 }$ \\
+\hline
+$s_L^{ 22 }$ & $ 1.221 \times 10^{ 2 }$ & $s_L^{ 18 }$ & $ 4.072 \times 10^{ 4 }$ & $s_L^{ 13 }$ & $ 2.218 \times 10^{ 5 }$  & $s_L^{ 8 }$ & $ 5.062 \times 10^{ 4 }$ & $s_L^{ 3 }$ & $ 1.887 \times 10^{ 2 }$ \\
+\hline
+$s_L^{ 21 }$ & $ 6.341 \times 10^{ 2 }$ & $s_L^{ 17 }$ & $ 7.464 \times 10^{ 4 }$ & $s_L^{ 12 }$ & $ 2.132 \times 10^{ 5 }$  & $s_L^{ 7 }$ & $ 2.476 \times 10^{ 4 }$ & $s_L^{ 2 }$ & $ 2.522 \times 10^{ 1 }$ \\
+\hline
+$s_L^{ 20 }$ & $ 2.456 \times 10^{ 3 }$ & $s_L^{ 16 }$ & $ 1.189 \times 10^{ 5 }$ & $s_L^{ 11 }$ & $ 1.811 \times 10^{ 5 }$  & $s_L^{ 6 }$ & $ 1.023 \times 10^{ 4 }$ & $s_L^{ 1 }$ & $ 1.686 \times 10^{ 0 }$ \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+\subsubsection{Analog Bandpass Transfer Function}
+The transformation is given by :
+\begin{equation*}
+    s_L = \frac{Bs}{s^2 + \Omega_o^2 }
+\end{equation*}
+Substituting the values of B and $\Omega_o$
+\begin{equation*}
+    s_L = \frac{1.832s}{s^2 + 0.964}
+\end{equation*}
+After substituting it can be written in the form N(s)/D(s) where the coefficients of N(s) and D(s) are given below :
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{-2.5cm}{}
+		\caption{Numerator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 48 }$ & $ 1.0 \times 10^{ 0 }$ & $s^{ 38 }$ & $ 2.962 \times 10^{ 4 }$ & $s^{ 28 }$ & $ 9.527 \times 10^{ 5 }$  & $s^{ 18 }$ & $ 4.427 \times 10^{ 5 }$ & $s^{ 8 }$ & $ 2.507 \times 10^{ 3 }$ \\
+\hline
+$s^{ 47 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 37 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 27 }$ & $ 0.0 \times 10^{ 0 }$  & $s^{ 17 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 7 }$ & $ 0.0 \times 10^{ 0 }$ \\
+\hline
+$s^{ 46 }$ & $ 2.233 \times 10^{ 1 }$ & $s^{ 36 }$ & $ 8.727 \times 10^{ 4 }$ & $s^{ 26 }$ & $ 1.128 \times 10^{ 6 }$  & $s^{ 16 }$ & $ 2.316 \times 10^{ 5 }$ & $s^{ 6 }$ & $ 4.443 \times 10^{ 2 }$ \\
+\hline
+$s^{ 45 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 35 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 25 }$ & $ 0.0 \times 10^{ 0 }$  & $s^{ 15 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 5 }$ & $ 0.0 \times 10^{ 0 }$ \\
+\hline
+$s^{ 44 }$ & $ 2.389 \times 10^{ 2 }$ & $s^{ 34 }$ & $ 2.088 \times 10^{ 5 }$ & $s^{ 24 }$ & $ 1.137 \times 10^{ 6 }$  & $s^{ 14 }$ & $ 1.014 \times 10^{ 5 }$ & $s^{ 4 }$ & $ 5.637 \times 10^{ 1 }$ \\
+\hline
+$s^{ 43 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 33 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 23 }$ & $ 0.0 \times 10^{ 0 }$  & $s^{ 13 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 3 }$ & $ 0.0 \times 10^{ 0 }$ \\
+\hline
+$s^{ 42 }$ & $ 1.63 \times 10^{ 3 }$ & $s^{ 32 }$ & $ 4.128 \times 10^{ 5 }$ & $s^{ 22 }$ & $ 9.763 \times 10^{ 5 }$  & $s^{ 12 }$ & $ 3.669 \times 10^{ 4 }$ & $s^{ 2 }$ & $ 4.56 \times 10^{ 0 }$ \\
+\hline
+$s^{ 41 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 31 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 21 }$ & $ 0.0 \times 10^{ 0 }$  & $s^{ 11 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 1 }$ & $ 0.0 \times 10^{ 0 }$ \\
+\hline
+$s^{ 40 }$ & $ 7.96 \times 10^{ 3 }$ & $s^{ 30 }$ & $ 6.827 \times 10^{ 5 }$ & $s^{ 20 }$ & $ 7.137 \times 10^{ 5 }$  & $s^{ 10 }$ & $ 1.078 \times 10^{ 4 }$ & $s^{ 0 }$ & $ 1.768 \times 10^{ -1 }$ \\
+\hline
+$s^{ 39 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 29 }$ & $ 0.0 \times 10^{ 0 }$ & $s^{ 19 }$ & $ 0.0 \times 10^{ 0 }$  & $s^{ 9 }$ & $ 0.0 \times 10^{ 0 }$ & - &-  \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{-2.5cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 48 }$ & $ 1.0 \times 10^{ 0 }$ & $s^{ 38 }$ & $ 2.421 \times 10^{ 8 }$ & $s^{ 28 }$ & $ 2.47 \times 10^{ 11 }$  & $s^{ 18 }$ & $ 7.78 \times 10^{ 10 }$ & $s^{ 8 }$ & $ 6.384 \times 10^{ 6 }$ \\
+\hline
+$s^{ 47 }$ & $ 2.741 \times 10^{ 1 }$ & $s^{ 37 }$ & $ 7.173 \times 10^{ 8 }$ & $s^{ 27 }$ & $ 3.145 \times 10^{ 11 }$  & $s^{ 17 }$ & $ 4.474 \times 10^{ 10 }$ & $s^{ 7 }$ & $ 1.451 \times 10^{ 6 }$ \\
+\hline
+$s^{ 46 }$ & $ 3.979 \times 10^{ 2 }$ & $s^{ 36 }$ & $ 1.933 \times 10^{ 9 }$ & $s^{ 26 }$ & $ 3.698 \times 10^{ 11 }$  & $s^{ 16 }$ & $ 2.372 \times 10^{ 10 }$ & $s^{ 6 }$ & $ 2.901 \times 10^{ 5 }$ \\
+\hline
+$s^{ 45 }$ & $ 4.007 \times 10^{ 3 }$ & $s^{ 35 }$ & $ 4.757 \times 10^{ 9 }$ & $s^{ 25 }$ & $ 4.017 \times 10^{ 11 }$  & $s^{ 15 }$ & $ 1.159 \times 10^{ 10 }$ & $s^{ 5 }$ & $ 5.021 \times 10^{ 4 }$ \\
+\hline
+$s^{ 44 }$ & $ 3.116 \times 10^{ 4 }$ & $s^{ 34 }$ & $ 1.072 \times 10^{ 10 }$ & $s^{ 24 }$ & $ 4.031 \times 10^{ 11 }$  & $s^{ 14 }$ & $ 5.208 \times 10^{ 9 }$ & $s^{ 4 }$ & $ 7.352 \times 10^{ 3 }$ \\
+\hline
+$s^{ 43 }$ & $ 1.98 \times 10^{ 5 }$ & $s^{ 33 }$ & $ 2.22 \times 10^{ 10 }$ & $s^{ 23 }$ & $ 3.737 \times 10^{ 11 }$  & $s^{ 13 }$ & $ 2.15 \times 10^{ 9 }$ & $s^{ 3 }$ & $ 8.796 \times 10^{ 2 }$ \\
+\hline
+$s^{ 42 }$ & $ 1.064 \times 10^{ 6 }$ & $s^{ 32 }$ & $ 4.227 \times 10^{ 10 }$ & $s^{ 22 }$ & $ 3.201 \times 10^{ 11 }$  & $s^{ 12 }$ & $ 8.127 \times 10^{ 8 }$ & $s^{ 2 }$ & $ 8.125 \times 10^{ 1 }$ \\
+\hline
+$s^{ 41 }$ & $ 4.951 \times 10^{ 6 }$ & $s^{ 31 }$ & $ 7.416 \times 10^{ 10 }$ & $s^{ 21 }$ & $ 2.532 \times 10^{ 11 }$  & $s^{ 11 }$ & $ 2.806 \times 10^{ 8 }$ & $s^{ 1 }$ & $ 5.207 \times 10^{ 0 }$ \\
+\hline
+$s^{ 40 }$ & $ 2.027 \times 10^{ 7 }$ & $s^{ 30 }$ & $ 1.2 \times 10^{ 11 }$ & $s^{ 20 }$ & $ 1.85 \times 10^{ 11 }$  & $s^{ 10 }$ & $ 8.808 \times 10^{ 7 }$ & $s^{ 0 }$ & $ 1.768 \times 10^{ -1 }$ \\
+\hline
+$s^{ 39 }$ & $ 7.39 \times 10^{ 7 }$ & $s^{ 29 }$ & $ 1.792 \times 10^{ 11 }$ & $s^{ 19 }$ & $ 1.249 \times 10^{ 11 }$  & $s^{ 9 }$ & $ 2.502 \times 10^{ 7 }$ & - & - \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+\subsubsection{Discrete Time Filter Transfer Function}
+To transform the analog domain transfer function into the discrete domain, we need to make use ofthe Bilinear Transformation which is given as :
+\begin{equation*}
+    s = \frac{1 - z^{-1}}{1 + z^{-1}}
+\end{equation*}
+Using  above  equation  we  get $H_{discrete,BPF}$(z)  from $H_{analog,BPF}$(s).It  can  be  written  in  the  form N(z)/D(z) where the coefficients of the polynomials N(z) and D(z) are given as :-
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{-4.1cm}{}
+		\caption{Numerator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 48 }$ & $ 1.982 \times 10^{ -6 }$ & $s^{ 38 }$ & $ 1.057 \times 10^{ -1 }$ & $s^{ 28 }$ & $ 5.377 \times 10^{ 0 }$  & $s^{ 18 }$ & $ 3.547 \times 10^{ 0 }$ & $s^{ 8 }$ & $ 2.555 \times 10^{ -2 }$ \\
+\hline
+$s^{ 47 }$ & $ -3.433 \times 10^{ -6 }$ & $s^{ 37 }$ & $ -1.247 \times 10^{ -1 }$ & $s^{ 27 }$ & $ -4.383 \times 10^{ 0 }$  & $s^{ 17 }$ & $ -1.863 \times 10^{ 0 }$ & $s^{ 7 }$ & $ -6.399 \times 10^{ -3 }$ \\
+\hline
+$s^{ 46 }$ & $ 5.041 \times 10^{ -5 }$ & $s^{ 36 }$ & $ 3.445 \times 10^{ -1 }$ & $s^{ 26 }$ & $ 6.886 \times 10^{ 0 }$  & $s^{ 16 }$ & $ 1.966 \times 10^{ 0 }$ & $s^{ 6 }$ & $ 4.68 \times 10^{ -3 }$ \\
+\hline
+$s^{ 45 }$ & $ -8.046 \times 10^{ -5 }$ & $s^{ 35 }$ & $ -3.778 \times 10^{ -1 }$ & $s^{ 25 }$ & $ -5.188 \times 10^{ 0 }$  & $s^{ 15 }$ & $ -9.253 \times 10^{ -1 }$ & $s^{ 5 }$ & $ -9.003 \times 10^{ -4 }$ \\
+\hline
+$s^{ 44 }$ & $ 6.102 \times 10^{ -4 }$ & $s^{ 34 }$ & $ 9.074 \times 10^{ -1 }$ & $s^{ 24 }$ & $ 7.476 \times 10^{ 0 }$  & $s^{ 14 }$ & $ 9.074 \times 10^{ -1 }$ & $s^{ 4 }$ & $ 6.102 \times 10^{ -4 }$ \\
+\hline
+$s^{ 43 }$ & $ -9.003 \times 10^{ -4 }$ & $s^{ 33 }$ & $ -9.253 \times 10^{ -1 }$ & $s^{ 23 }$ & $ -5.188 \times 10^{ 0 }$  & $s^{ 13 }$ & $ -3.778 \times 10^{ -1 }$ & $s^{ 3 }$ & $ -8.046 \times 10^{ -5 }$ \\
+\hline
+$s^{ 42 }$ & $ 4.68 \times 10^{ -3 }$ & $s^{ 32 }$ & $ 1.966 \times 10^{ 0 }$ & $s^{ 22 }$ & $ 6.886 \times 10^{ 0 }$  & $s^{ 12 }$ & $ 3.445 \times 10^{ -1 }$ & $s^{ 2 }$ & $ 5.041 \times 10^{ -5 }$ \\
+\hline
+$s^{ 41 }$ & $ -6.399 \times 10^{ -3 }$ & $s^{ 31 }$ & $ -1.863 \times 10^{ 0 }$ & $s^{ 21 }$ & $ -4.383 \times 10^{ 0 }$  & $s^{ 11 }$ & $ -1.247 \times 10^{ -1 }$ & $s^{ 1 }$ & $ -3.433 \times 10^{ -6 }$ \\
+\hline
+$s^{ 40 }$ & $ 2.555 \times 10^{ -2 }$ & $s^{ 30 }$ & $ 3.547 \times 10^{ 0 }$ & $s^{ 20 }$ & $ 5.377 \times 10^{ 0 }$  & $s^{ 10 }$ & $ 1.057 \times 10^{ -1 }$ & $s^{ 0 }$ & $ 1.982 \times 10^{ -6 }$ \\
+\hline
+$s^{ 39 }$ & $ -3.243 \times 10^{ -2 }$ & $s^{ 29 }$ & $ -3.12 \times 10^{ 0 }$ & $s^{ 19 }$ & $ -3.12 \times 10^{ 0 }$  & $s^{ 9 }$ & $ -3.243 \times 10^{ -2 }$ & $s^{ -1 }$ & $ 1.0 \times 10^{ 0 }$ \\
+\hline
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+
+
+\begin{table}[H]
+		% Center the table
+  \centering
+		\begin{adjustwidth}{-4.1cm}{}
+		\caption{Denominator Coefficients}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient & Degree & Coefficient\\
+\hline
+$s^{ 48 }$ & $ 1.0 \times 10^{ 0 }$ & $s^{ 38 }$ & $ 6.746 \times 10^{ 0 }$ & $s^{ 28 }$ & $ 1.115 \times 10^{ 0 }$  & $s^{ 18 }$ & $ 6.13 \times 10^{ -3 }$ & $s^{ 8 }$ & $ 8.657 \times 10^{ -7 }$ \\
+\hline
+$s^{ 47 }$ & $ -9.069 \times 10^{ -1 }$ & $s^{ 37 }$ & $ -4.768 \times 10^{ 0 }$ & $s^{ 27 }$ & $ -5.797 \times 10^{ -1 }$  & $s^{ 17 }$ & $ -2.25 \times 10^{ -3 }$ & $s^{ 7 }$ & $ -1.555 \times 10^{ -7 }$ \\
+\hline
+$s^{ 46 }$ & $ 1.529 \times 10^{ 0 }$ & $s^{ 36 }$ & $ 6.983 \times 10^{ 0 }$ & $s^{ 26 }$ & $ 4.767 \times 10^{ -1 }$  & $s^{ 16 }$ & $ 1.545 \times 10^{ -3 }$ & $s^{ 6 }$ & $ 7.233 \times 10^{ -8 }$ \\
+\hline
+$s^{ 45 }$ & $ -1.331 \times 10^{ 0 }$ & $s^{ 35 }$ & $ -4.571 \times 10^{ 0 }$ & $s^{ 25 }$ & $ -2.382 \times 10^{ -1 }$  & $s^{ 15 }$ & $ -5.007 \times 10^{ -4 }$ & $s^{ 5 }$ & $ -1.04 \times 10^{ -8 }$ \\
+\hline
+$s^{ 44 }$ & $ 4.497 \times 10^{ 0 }$ & $s^{ 34 }$ & $ 4.749 \times 10^{ 0 }$ & $s^{ 24 }$ & $ 2.101 \times 10^{ -1 }$  & $s^{ 14 }$ & $ 2.962 \times 10^{ -4 }$ & $s^{ 4 }$ & $ 4.887 \times 10^{ -9 }$ \\
+\hline
+$s^{ 43 }$ & $ -3.643 \times 10^{ 0 }$ & $s^{ 33 }$ & $ -3.015 \times 10^{ 0 }$ & $s^{ 23 }$ & $ -9.567 \times 10^{ -2 }$  & $s^{ 13 }$ & $ -8.823 \times 10^{ -5 }$ & $s^{ 3 }$ & $ -4.711 \times 10^{ -10 }$ \\
+\hline
+$s^{ 42 }$ & $ 5.059 \times 10^{ 0 }$ & $s^{ 32 }$ & $ 3.598 \times 10^{ 0 }$ & $s^{ 22 }$ & $ 7.053 \times 10^{ -2 }$  & $s^{ 12 }$ & $ 5.364 \times 10^{ -5 }$ & $s^{ 2 }$ & $ 1.91 \times 10^{ -10 }$ \\
+\hline
+$s^{ 41 }$ & $ -3.968 \times 10^{ 0 }$ & $s^{ 31 }$ & $ -2.108 \times 10^{ 0 }$ & $s^{ 21 }$ & $ -3.059 \times 10^{ -2 }$  & $s^{ 11 }$ & $ -1.365 \times 10^{ -5 }$ & $s^{ 1 }$ & $ -9.941 \times 10^{ -12 }$ \\
+\hline
+$s^{ 40 }$ & $ 7.798 \times 10^{ 0 }$ & $s^{ 30 }$ & $ 1.941 \times 10^{ 0 }$ & $s^{ 20 }$ & $ 2.374 \times 10^{ -2 }$  & $s^{ 10 }$ & $ 7.192 \times 10^{ -6 }$ & $s^{ 0 }$ & $ 4.038 \times 10^{ -12 }$ \\
+\hline
+$s^{ 39 }$ & $ -5.679 \times 10^{ 0 }$ & $s^{ 29 }$ & $ -1.099 \times 10^{ 0 }$ & $s^{ 19 }$ & $ -9.271 \times 10^{ -3 }$  & $s^{ 9 }$ & $ -1.614 \times 10^{ -6 }$ & $s^{ -1 }$ & $ 1.0 \times 10^{ 0 }$ \\
+\hline
+
+  	\end{tabular}
+	\end{adjustwidth}
+\end{table}
+\newpage
+\subsubsection{Matlab Plots}
+\textbf{Frequency Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.7]{Freq_resp_bsf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\textbf{Magnitude Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.6]{mag_resp_bsf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\textbf{Pole - Zero Plot}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.5]{pole_zeroplot_bsf.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\subsection{Final Results}
+Using the above two designed butterworth filters, we can cascade them to get the desired Multiband IIR Filter. The discrete Transfer function resulting has $s^{89}$ as the highest order in numerator and the denominator, therefore I am omitting their coefficients. The results of the cascaded Filters are as follows
+\subsubsection{Matlab Plots}
+\textbf{Frequency Response}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.7]{Freq_resp_final.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\textbf{Magnitude Response}
+
+\begin{figure}[H]
+\begin{adjustwidth}{-1cm}{}
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.3]{Final_TF.jpg}
+    \label{fig:my_label}
+    \end{adjustwidth}
+\end{figure}
+
+\textbf{Pole - Zero Plot}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+    \centering
+    \includegraphics[scale = 0.6]{polezero_final.jpg}
+    \label{fig:my_label}
+\end{figure}
+
+\end{document}
